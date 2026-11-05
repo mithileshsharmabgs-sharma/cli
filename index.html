@@ -241,7 +241,16 @@
       color: #f7fff9;
     }
 
-    .brand-mark { background: var(--lime); color: #203323; }
+    .brand-mark {
+      background: var(--lime);
+      color: #203323;
+    }
+
+    .brand-mark svg {
+      display: block;
+      width: 20px;
+      height: 20px;
+    }
 
     .screen {
       background: #173e49;
@@ -400,41 +409,65 @@
     .converter-panel {
       display: grid;
       min-height: 0;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      width: min(100%, 860px);
+      grid-template-columns: minmax(0, 1fr);
       align-content: center;
-      gap: 24px;
-      padding: clamp(20px, 5vw, 64px);
-      border-radius: 18px;
-      background: #173e49;
-      color: #f7fff9;
+      gap: 20px;
+      margin: auto;
+      padding: clamp(20px, 4vw, 44px);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: #f6faf8;
+      color: var(--ink);
+      box-shadow: 0 16px 40px rgba(20, 45, 52, .08);
     }
 
-    .converter-title { grid-column: 1 / -1; margin: 0; font: 600 clamp(28px, 4vw, 48px) "Space Grotesk", sans-serif; }
-    .converter-field { display: grid; gap: 10px; color: #a8c7c4; font-size: 14px; font-weight: 700; }
+    .converter-heading { display: grid; gap: 6px; }
+    .converter-eyebrow {
+      margin: 0;
+      color: #52716e;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+    .converter-title { margin: 0; color: #173e49; font: 600 clamp(28px, 4vw, 42px) "Space Grotesk", sans-serif; }
+    .converter-description { margin: 0; color: #607875; font-size: 14px; }
+    .converter-field { display: grid; min-width: 0; gap: 9px; color: #31534f; font-size: 13px; font-weight: 700; }
+    .conversion-fields {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .converter-input-group { display: grid; gap: 10px; }
     .converter-field input, .converter-field select {
       width: 100%;
-      min-height: 58px;
-      padding: 12px 16px;
-      border: 1px solid rgba(247, 255, 249, .18);
-      border-radius: 10px;
-      outline: none;
-      background: #214d57;
-      color: #f7fff9;
-      font: 600 20px "DM Sans", sans-serif;
-    }
-    .converter-field input:focus, .converter-field select:focus { border-color: var(--lime); }
-    .conversion-result {
-      grid-column: 1 / -1;
-      display: grid;
-      align-content: center;
-      min-height: 130px;
-      padding: 20px;
+      min-height: 54px;
+      padding: 12px 14px;
+      border: 1px solid #d6e4e1;
       border-radius: 12px;
-      background: #d9f36a;
+      outline: 0;
+      background: #fff;
+      color: #173e49;
+      font: 600 17px "DM Sans", sans-serif;
+    }
+    .converter-field #toUnit { height: calc(2 * 54px + 10px); }
+    .converter-field input:focus-visible, .converter-field select:focus-visible {
+      border-color: #527d72;
+      box-shadow: 0 0 0 3px rgba(82, 125, 114, .16);
+    }
+    .conversion-result {
+      display: grid;
+      gap: 8px;
+      min-width: 0;
+      min-height: 112px;
+      padding: 20px 22px;
+      border-radius: 16px;
+      background: var(--lime);
       color: #203323;
     }
-    .result-label { font-size: 13px; font-weight: 700; }
-    .result-value { overflow-wrap: anywhere; font: 600 clamp(30px, 5vw, 56px) "Space Grotesk", sans-serif; }
+    .result-label { font-size: 12px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; }
+    .result-value { overflow-wrap: anywhere; font: 600 clamp(30px, 5vw, 48px) "Space Grotesk", sans-serif; }
 
     @media (min-width: 760px) {
       .calculator {
@@ -451,8 +484,7 @@
       .screen { min-height: 0; padding: clamp(20px, 3vw, 40px); }
       .keys { gap: clamp(8px, 1.5vh, 14px); }
       button { height: 100%; }
-      .converter-panel { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
-      .converter-panel, .converter-title, .conversion-result { grid-column: 1 / -1; }
+      .converter-panel { grid-column: 1 / -1; }
     }
 
     @media (max-width: 520px) {
@@ -461,7 +493,9 @@
       .mode-tabs { gap: 5px; }
       .mode-tab { height: 38px; padding: 0 10px; font-size: 12px; }
       .workspace { grid-template-rows: minmax(100px, .65fr) minmax(270px, 1.6fr); gap: 12px; }
-      .converter-panel { gap: 14px; padding: 16px; }
+      .converter-panel { gap: 16px; padding: 18px; border-radius: 18px; }
+      .conversion-fields { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+      .conversion-result { min-height: 96px; padding: 16px; }
     }
 
     body {
@@ -501,12 +535,156 @@
 
       .workspace { min-height: 0; }
     }
+
+    body:has(.converter-panel:not([hidden])) {
+      padding: 0;
+    }
+
+    .calculator:has(.converter-panel:not([hidden])) {
+      width: 100%;
+      height: auto;
+      min-height: 100svh;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      gap: 12px;
+      padding: 14px clamp(16px, 4vw, 36px);
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .calculator:has(.converter-panel:not([hidden])) .converter-panel {
+      width: 100%;
+      max-width: none;
+      height: 100%;
+      margin: 0;
+      gap: 12px;
+      padding: 24px;
+      border-radius: 18px;
+    }
+
+    .calculator:has(.converter-panel:not([hidden])) .converter-field input,
+    .calculator:has(.converter-panel:not([hidden])) .converter-field select {
+      min-height: 42px;
+      padding: 9px 12px;
+      font-size: 15px;
+    }
+
+    .calculator:has(.converter-panel:not([hidden])) .converter-field #toUnit {
+      height: calc(2 * 42px + 10px);
+    }
+
+    .calculator:has(.converter-panel:not([hidden])) .conversion-result {
+      min-height: 82px;
+      padding: 14px 16px;
+    }
+
+    @media (max-height: 600px) {
+      .calculator:has(.converter-panel:not([hidden])) {
+        padding-block: 8px;
+        gap: 6px;
+      }
+
+      .calculator:has(.converter-panel:not([hidden])) .converter-panel {
+        gap: 6px;
+        padding: 10px 20px;
+      }
+
+      .calculator:has(.converter-panel:not([hidden])) .converter-heading {
+        gap: 4px;
+      }
+
+      .calculator:has(.converter-panel:not([hidden])) .converter-title {
+        font-size: 28px;
+        line-height: 1.05;
+      }
+
+      .calculator:has(.converter-panel:not([hidden])) .converter-field input,
+      .calculator:has(.converter-panel:not([hidden])) .converter-field select {
+        min-height: 38px;
+        padding-block: 8px;
+      }
+
+      .calculator:has(.converter-panel:not([hidden])) .converter-field #toUnit {
+        height: calc(2 * 38px + 6px);
+      }
+
+      .calculator:has(.converter-panel:not([hidden])) .converter-input-group {
+        gap: 6px;
+      }
+
+      .calculator:has(.converter-panel:not([hidden])) .conversion-result {
+        min-height: 68px;
+        padding: 8px 14px;
+      }
+
+      .calculator:has(.converter-panel:not([hidden])) .result-label {
+        font-size: 10px;
+      }
+
+      .calculator:has(.converter-panel:not([hidden])) .result-value {
+        font-size: clamp(26px, 3vw, 32px);
+        line-height: 1.1;
+      }
+    }
+
+    @media (orientation: landscape) and (min-width: 700px) {
+      .calculator:has(.converter-panel:not([hidden])) .converter-panel {
+        grid-template-columns: minmax(180px, .7fr) minmax(0, 1.3fr);
+        align-content: center;
+        gap: clamp(10px, 2vw, 24px);
+        padding: clamp(16px, 3vh, 30px) clamp(20px, 4vw, 48px);
+      }
+
+      .calculator:has(.converter-panel:not([hidden])) .converter-heading,
+      .calculator:has(.converter-panel:not([hidden])) .conversion-result {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (orientation: landscape) and (max-height: 600px) {
+      .calculator:has(.converter-panel:not([hidden])) .converter-field {
+        gap: 5px;
+      }
+
+      .calculator:has(.converter-panel:not([hidden])) .converter-field input,
+      .calculator:has(.converter-panel:not([hidden])) .converter-field select {
+        min-height: 34px;
+        padding-block: 6px;
+      }
+
+      .calculator:has(.converter-panel:not([hidden])) .converter-field #toUnit {
+        height: calc(2 * 34px + 4px);
+      }
+
+      .calculator:has(.converter-panel:not([hidden])) .converter-input-group {
+        gap: 4px;
+      }
+
+      .calculator:has(.converter-panel:not([hidden])) .conversion-result {
+        min-height: 60px;
+        padding: 6px 12px;
+      }
+
+      .calculator:has(.converter-panel:not([hidden])) .result-value {
+        font-size: 24px;
+        line-height: 1;
+      }
+    }
   </style>
 </head>
 <body>
   <main class="calculator" aria-label="Calculator">
     <header class="topline">
-      <div class="brand"><span class="brand-mark" aria-hidden="true">+</span> M Sharma Calculator</div>
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="5" y="2.5" width="14" height="19" rx="2.5" stroke="currentColor" stroke-width="2"/>
+            <rect x="8" y="5.5" width="8" height="4" rx="1" fill="currentColor"/>
+            <path d="M8.5 13h1m5 0h1m-7 4h1m5 0h1" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+          </svg>
+        </span>
+        M Sharma Calculator
+      </div>
       <nav class="mode-tabs" aria-label="Calculator mode">
         <button class="mode-tab" type="button" data-mode="calculator" aria-selected="true">Calculator</button>
         <button class="mode-tab" type="button" data-mode="converter" aria-selected="false">Convert</button>
@@ -548,7 +726,11 @@
     </div>
 
     <section class="converter-panel" id="converterPanel" aria-label="Unit converter" hidden>
-      <h1 class="converter-title">Unit converter</h1>
+      <header class="converter-heading">
+        <p class="converter-eyebrow">Quick conversion</p>
+        <h1 class="converter-title">Unit converter</h1>
+        <p class="converter-description">Convert values between common units.</p>
+      </header>
       <label class="converter-field">Category
         <select id="conversionCategory">
           <option value="length">Length</option>
@@ -558,13 +740,17 @@
           <option value="volume">Volume</option>
         </select>
       </label>
-      <label class="converter-field">From
-        <input id="conversionInput" type="number" step="any" value="1" inputmode="decimal" aria-label="Value to convert">
-        <select id="fromUnit" aria-label="Convert from"></select>
-      </label>
-      <label class="converter-field">To
-        <select id="toUnit" aria-label="Convert to"></select>
-      </label>
+      <div class="conversion-fields">
+        <label class="converter-field">From
+          <span class="converter-input-group">
+            <input id="conversionInput" type="number" step="any" value="1" inputmode="decimal" aria-label="Value to convert">
+            <select id="fromUnit" aria-label="Convert from"></select>
+          </span>
+        </label>
+        <label class="converter-field">To
+          <select id="toUnit" aria-label="Convert to"></select>
+        </label>
+      </div>
       <output class="conversion-result" aria-live="polite">
         <span class="result-label">Converted value</span>
         <span class="result-value" id="conversionResult">1000 m</span>
